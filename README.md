@@ -636,7 +636,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function ModeToggle() {
+export default function ThemeToggle() {
   const { setTheme } = useTheme();
 
   return (
@@ -807,6 +807,8 @@ export enum JobMode {
   PartTime = 'part-time',
   Internship = 'internship',
 }
+
+// Enums in TypeScript are a special type that allows yout to define a set of named constants. They can be numeric or string-based.
 
 export const createAndEditJobSchema = z.object({
   position: z.string().min(2, {

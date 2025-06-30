@@ -1,5 +1,11 @@
-const JobsPage = () => {
-  return <h1 className="text-4xl">JobsPage</h1>;
+import CreateJobForm from "@/components/CreateJobForm";
+
+const AddJobPage = () => {
+  return (
+    <>
+      <CreateJobForm />
+    </>
+  );
 };
 
-export default JobsPage;
+export default AddJobPage;

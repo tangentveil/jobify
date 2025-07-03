@@ -99,7 +99,6 @@ export async function getAllJobsAction({
   }
 }
 
-
 export async function deleteJobAction(id: string): Promise<JobType | null> {
   const userId = authenticateAndRedirect();
 
@@ -131,7 +130,29 @@ export async function getSingleJobAction(id: string): Promise<JobType | null> {
     job = null;
   }
   if (!job) {
-    redirect('/jobs');
+    redirect("/jobs");
   }
   return job;
+}
+
+export async function updateJobAction(
+  id: string,
+  values: CreateAndEditJobType
+): Promise<JobType | null> {
+  const userId = authenticateAndRedirect();
+
+  try {
+    const job: JobType = await prisma.job.update({
+      where: {
+        id,
+        clerkId: userId,
+      },
+      data: {
+        ...values,
+      },
+    });
+    return job;
+  } catch (error) {
+    return null;
+  }
 }

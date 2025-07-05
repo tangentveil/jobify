@@ -2391,13 +2391,15 @@ This will generate jobs with the correct createdAt dates (within the last six mo
 - create seed.js
 - run "node prisma/seed"
 
+userId - user_2z5zx6l4pRg4ATlSWKVTlG07Hvj
+
 ```js
 const { PrismaClient } = require('@prisma/client');
 const data = require('./mock-data.json');
 const prisma = new PrismaClient();
 
 async function main() {
-  const clerkId = 'user_2ZUfUOtKM8W9eF8hSQbISv7aQmn';
+  const clerkId = 'user_2z5zx6l4pRg4ATlSWKVTlG07Hvj';
   const jobs = data.map((job) => {
     return {
       ...job,

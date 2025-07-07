@@ -27,7 +27,7 @@ export async function createJobAction(
       },
     });
 
-    console.log(job);
+    // console.log(job);
 
     return job;
   } catch (error) {
@@ -55,7 +55,7 @@ export async function getAllJobsAction({
   totalPages: number;
 }> {
   const userId = authenticateAndRedirect();
-  console.log(userId);
+  // console.log(userId);
 
   try {
     let whereClause: Prisma.JobWhereInput = {
@@ -87,14 +87,24 @@ export async function getAllJobsAction({
       };
     }
 
+    const skip = (page - 1) * limit;
+
     const jobs: JobType[] = await prisma.job.findMany({
       where: whereClause,
+      skip,
+      take: limit,
       orderBy: {
         createdAt: "desc",
       },
     });
 
-    return { jobs, count: 0, page: 1, totalPages: 0 };
+    const count: number = await prisma.job.count({
+      where: whereClause,
+    });
+
+    const totalPages = Math.ceil(count / limit);
+
+    return { jobs, count, page, totalPages };
   } catch (error) {
     return { jobs: [], count: 0, page: 1, totalPages: 0 };
   }
@@ -176,13 +186,10 @@ export async function getStatsAction(): Promise<{
         clerkId: userId, // replace userId with the actual clerkId
       },
     });
-    const statsObject = stats.reduce(
-      ( acc, curr ) => {
-        acc[curr.status] = curr._count.status;
-        return acc;
-      },
-      {} as Record<string, number>
-    );
+    const statsObject = stats.reduce((acc, curr) => {
+      acc[curr.status] = curr._count.status;
+      return acc;
+    }, {} as Record<string, number>);
 
     const defaultStats = {
       pending: 0,
@@ -218,7 +225,7 @@ export async function getChartsDataAction(): Promise<
       },
     });
 
-    console.log(jobs)
+    // console.log(jobs);
 
     let applicationsPerMonth = jobs.reduce((acc, job) => {
       const date = dayjs(job.createdAt).format("MMM YY");
@@ -234,7 +241,7 @@ export async function getChartsDataAction(): Promise<
       return acc;
     }, [] as Array<{ date: string; count: number }>);
 
-    console.log(applicationsPerMonth);
+    // console.log(applicationsPerMonth);
 
     return applicationsPerMonth;
   } catch (error) {
